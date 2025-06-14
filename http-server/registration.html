@@ -52,21 +52,21 @@
       users.push(user);
       localStorage.setItem("users", JSON.stringify(users));
     }
+function displayUsers() {
+  const users = getUsers();
+  tableBody.innerHTML = "";
+  users.forEach(user => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${user.name}</td>
+      <td>${user.email}</td>
+      <td>${user.dob}</td>
+      <td>${user.accepted ? "Yes" : "No"}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
 
-    function displayUsers() {
-      const users = getUsers();
-      tableBody.innerHTML = "";
-      users.forEach(user => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${user.name}</td>
-          <td>${user.email}</td>
-          <td>${user.dob}</td>
-          <td>${user.accepted ? "Yes" : "No"}</td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -76,7 +76,6 @@
       const dob = form.dob.value;
       const accepted = form.acceptTerms.checked;
 
-      // ✅ Validate age using only the year
       const birthYear = new Date(dob).getFullYear();
       const currentYear = new Date().getFullYear();
       const age = currentYear - birthYear;
