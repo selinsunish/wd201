@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registration Form</title>
+</head>
+<body>
+  <h1>Student Registration Form</h1>
+
+  <form id="registrationForm">
+    <label for="name">Name:</label><br />
+    <input type="text" id="name" name="name" required /><br /><br />
+
+    <label for="email">Email:</label><br />
+    <input type="email" id="email" name="email" required /><br /><br />
+
+    <label for="dob">Date of Birth:</label><br />
+    <input type="date" id="dob" name="dob" required /><br /><br />
+
+    <label>
+      <input type="checkbox" id="acceptTerms" name="acceptTerms" required />
+      I accept the terms and conditions
+    </label><br /><br />
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <h2>Registered Users</h2>
+  <table border="1" id="userTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>DOB</th>
+        <th>Accepted Terms?</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById("registrationForm");
+    const tableBody = document.querySelector("#userTable tbody");
+
+    function getUsers() {
+      return JSON.parse(localStorage.getItem("users") || "[]");
+    }
+
+    function saveUser(user) {
+      const users = getUsers();
+      users.push(user);
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+function displayUsers() {
+  const users = getUsers();
+  tableBody.innerHTML = "";
+  users.forEach(user => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${user.name}</td>
+      <td>${user.email}</td>
+      <td>${user.dob}</td>
+      <td>${user.accepted ? "Yes" : "No"}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
+
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const name = form.name.value;
+      const email = form.email.value;
+      const dob = form.dob.value;
+      const accepted = form.acceptTerms.checked;
+
+      const birthYear = new Date(dob).getFullYear();
+      const currentYear = new Date().getFullYear();
+      const age = currentYear - birthYear;
+
+      if (age < 18 || age > 55) {
+        alert("Age must be between 18 and 55 years.");
+        return;
+      }
+
+      saveUser({ name, email, dob, accepted });
+      displayUsers();
+      form.reset();
+    });
+
+    displayUsers();
+  </script>
+</body>
+</html>
