@@ -12,6 +12,12 @@
   "devDependencies": {
     "husky": "^9.1.7",
     "jest": "^30.0.0",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "sequelize-cli": "^6.6.3"
+  },
+  "dependencies": {
+    "minimist": "^1.2.8",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7"
   }
 }
