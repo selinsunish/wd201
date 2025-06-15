@@ -83,9 +83,17 @@ module.exports = (sequelize, DataTypes) => {
     displayableString() {
       const checkbox = this.completed ? "[x]" : "[ ]";
       const today = new Date().toISOString().split("T")[0];
-      const datePart = this.dueDate === today ? "" : this.dueDate;
+      const isDueToday = this.dueDate === today;
+
+      // Show dueDate if:
+      // - It's NOT due today, OR
+      // - It IS due today AND the task is completed
+      const showDate = !isDueToday || this.completed;
+      const datePart = showDate ? this.dueDate : "";
+
       return `${this.id}. ${checkbox} ${this.title} ${datePart}`.trim();
     }
+
   }
 
   Todo.init(
