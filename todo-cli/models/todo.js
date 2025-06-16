@@ -21,3 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       completed: DataTypes.BOOLEAN,
     },
     {
+      sequelize,
+      modelName: "Todo",
+    }
+  );
+
+  return Todo;
+};
