@@ -81,20 +81,24 @@ module.exports = (sequelize, DataTypes) => {
 
     // Format each todo item for printing
     displayableString() {
-      const checkbox = this.completed ? "[x]" : "[ ]";
-      const today = new Date().toISOString().split("T")[0];
-      const isDueToday = this.dueDate === today;
+      const UNCHECKED_BOX = "[ ]";
+      const CROSS_BOX = "[✗]";
 
-      // Show dueDate if:
-      // - It's NOT due today, OR
-      // - It IS due today AND the task is completed
-      const showDate = !isDueToday || this.completed;
-      const datePart = showDate ? this.dueDate : "";
+      const today = new Date().toISOString().split("T")[0];
+
+      // Decide the box symbol
+      let checkbox;
+      if (this.dueDate < today) {
+        checkbox = CROSS_BOX; // Incomplete and overdue
+      } else {
+        checkbox = UNCHECKED_BOX; // Incomplete but not overdue
+      }
+     
+      const needsDueDate = this.dueDate !== today || this.completed;
+      const datePart = needsDueDate ? this.dueDate : "";
 
       return `${this.id}. ${checkbox} ${this.title} ${datePart}`.trim();
     }
-
-  }
 
   Todo.init(
     {
